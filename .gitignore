@@ -1,0 +1,41 @@
+# --- Secrets / local env ---
+.env
+.env.*
+!.env.example
+
+# --- Java / Maven build outputs ---
+target/
+out/
+build/
+
+# --- Logs ---
+*.log
+logs/
+
+# --- IDE files ---
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.classpath
+.project
+.settings/
+
+# --- OS generated files ---
+.DS_Store
+Thumbs.db
+
+# --- Testing / runtime temp files ---
+*.tmp
+*.swp
+*.swo
+
+# --- Coverage / reports ---
+coverage/
+*.exec
+*.hprof
+
+# --- Local docs ---
+HELP.md
+
