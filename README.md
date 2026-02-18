@@ -14,6 +14,7 @@ Production-style REST API for task and project management with JWT authenticatio
 - [Configuration](#configuration)
 - [Local Development](#local-development)
 - [Testing](#testing)
+- [Continuous Integration](#continuous-integration)
 - [Error Handling](#error-handling)
 - [Project Structure](#project-structure)
 - [Roadmap](#roadmap)
@@ -218,6 +219,15 @@ Dedicated service test classes:
 
 These validate business rules in isolation with mocked dependencies.
 
+## Continuous Integration
+
+GitHub Actions CI is configured in `.github/workflows/ci.yml`.
+
+- Triggers on `push` to `main` and on all pull requests.
+- Starts a PostgreSQL service container (`postgres:17`) for database-backed tests.
+- Sets test environment variables (`DB_HOST`, `DB_PORT`, `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`).
+- Runs `mvn -B test` with Maven dependency caching.
+
 ## Error Handling
 
 `GlobalExceptionHandler` standardizes API error payloads via `ApiError`:
@@ -254,6 +264,7 @@ Current implementation is feature-complete for core product scope and testing.
 
 Next production-hardening steps:
 
-- CI pipeline (GitHub Actions).
 - API documentation polish (OpenAPI/Swagger).
-- Deployment packaging and release workflow.
+- Database hardening via explicit SQL migrations/constraints.
+- Refresh token flow for authentication lifecycle.
+- Optional: Postman collection for API demo/distribution.
