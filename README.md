@@ -40,6 +40,7 @@ Production-style REST API for task and project management with JWT authenticatio
 - Collaborator assignment with responsible-collaborator business rules.
 - Pagination + sorting + filtering on list endpoints.
 - Global exception handling with consistent API error payloads.
+- OpenAPI documentation with Swagger UI.
 
 ## Architecture
 
@@ -228,6 +229,14 @@ GitHub Actions CI is configured in `.github/workflows/ci.yml`.
 - Sets test environment variables (`DB_HOST`, `DB_PORT`, `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`).
 - Runs `mvn -B test` with Maven dependency caching.
 
+## API Documentation
+
+OpenAPI documentation is enabled with Swagger UI.
+
+- Swagger UI: `http://localhost:8080/swagger-ui/index.html`
+- OpenAPI JSON: `http://localhost:8080/v3/api-docs`
+- JWT bearer scheme is documented globally in OpenAPI config.
+
 ## Error Handling
 
 `GlobalExceptionHandler` standardizes API error payloads via `ApiError`:
@@ -264,7 +273,6 @@ Current implementation is feature-complete for core product scope and testing.
 
 Next production-hardening steps:
 
-- API documentation polish (OpenAPI/Swagger).
 - Database hardening via explicit SQL migrations/constraints.
 - Refresh token flow for authentication lifecycle.
 - Optional: Postman collection for API demo/distribution.

@@ -10,10 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-/**
- * Security configuration for HTTP endpoints.
- * This initial version disables form login and allows public access to authentication endpoints.
- */
+// Security rules for a stateless JWT API.
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -36,23 +33,25 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // CSRF is disabled for stateless REST APIs using token-based authentication
+                // CSRF is disabled because this API authenticates with Bearer JWT, not cookie sessions.
                 .csrf(csrf -> csrf.disable())
-                // Use stateless sessions because authentication is handled via JWT
+                // Each request is self-authenticated; no server session is created.
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        // Public endpoints for registration and login
+                        // Public auth endpoints.
                         .requestMatchers("/auth/**").permitAll()
-                        // Admin endpoints require ADMIN role (i.e. authority ROLE_ADMIN)
+                        // OpenAPI/Swagger docs endpoints.
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        // Admin endpoints require role ADMIN (authority ROLE_ADMIN).
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        // Allow access to error path
+                        // Keep framework error dispatch public.
                         .requestMatchers("/error").permitAll()
-                        // Everything else requires authentication via a valid JWT
+                        // All business endpoints require a valid JWT.
                         .anyRequest().authenticated()
                 )
-                // Disable default login form and HTTP Basic auth
+                // Disable form and basic auth in favor of JWT auth only.
                 .formLogin(form -> form.disable())
                 .httpBasic(httpBasic -> httpBasic.disable())
                 // Ensures authentication lookups use the custom DB-backed user details service.
